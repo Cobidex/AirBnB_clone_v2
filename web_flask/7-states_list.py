@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 
 @app.teardown_appcontext
-def remove_session(self):
+def remove_session(error):
     '''
         tears down the session
     '''
