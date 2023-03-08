@@ -1,43 +1,30 @@
 #!/usr/bin/python3
-'''
-    contains the hello HBNB functions
-'''
 
 from flask import Flask
 
 app = Flask(__name__)
 
+@app.route('/', strict_slashes=False)
+def Hello():
+    return 'Hello HBNB!'
 
-@app.route("/", strict_slashes=False)
-def hello_hbnb():
-    '''prints hello HBNB to screen'''
-    return "Hello HBNB!"
-
-
-@app.route("/hbnb", strict_slashes=False)
+@app.route('/hbnb', strict_slashes=False)
 def hbnb():
-    '''displays just HBNB'''
-    return "HBNB"
+    return 'HBNB'
 
-
-@app.route("/c/<text>", strict_slashes=False)
-def user_text(text):
-    '''displays c with a text'''
+@app.route('/c/<text>', strict_slashes=False)
+def c_text(text):
     return 'C {}'. format(text.replace('_', ' '))
 
-
-@app.route('/python/', strict_slashes=False)
-@app.route("/python/<text>", strict_slashes=False)
-def pyth_txt(text="is cool"):
-    '''displays python with a text'''
+@app.route('/python', strict_slashes=False)
+@app.route('/python/<text>', strict_slashes=False)
+def python(text='cool'):
     return 'Python {}'. format(text.replace('_', ' '))
 
 
-@app.route("/number/<int:n>", strict_slashes=False)
-def number(n):
-    '''returns a number text'''
-    return "{} is a number". format(n)
+@app.route('/number/<int:n>', strict_slashes=False)
+def n_var(n):
+    return '{} is a number'. format(n)
 
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+if __name__ == '__main__':
+    app.run(port=5000, host='0.0.0.0')

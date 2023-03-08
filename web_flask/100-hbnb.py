@@ -1,45 +1,27 @@
 #!/usr/bin/python3
-'''
-    Starts a Flash Web Application
-'''
-from models import storage
-from models.state import State
+
+from flask import Flask, render_template
+import models
 from models.city import City
+from models.state import State
 from models.amenity import Amenity
 from models.place import Place
-from os import environ
-from flask import Flask, render_template
+from models.user import User
+
 app = Flask(__name__)
 
 
 @app.teardown_appcontext
-def remove_session(error):
-    '''Remove the current SQLAlchemy Session'''
-    storage.close()
-
+def teardown(exception):
+    models.storage.close()
 
 @app.route('/hbnb', strict_slashes=False)
-def hbnb():
-    '''HBNB is going live'''
-    states = storage.all(State).values()
-    states = sorted(states, key=lambda k: k.name)
-    state_c = []
+def hbnb_filters():
+    s = [o for o in models.storage.all(State).values()]
+    a = [o for o in models.storage.all(Amenity).values()]
+    p = [o for o in models.storage.all(Place).values()]
+    u = [o for o in models.storage.all(User).values()]
+    return render_template('100-hbnb.html', s=s, a=a, p=p, u=u)
 
-    for state in states:
-        state_c.append([state, sorted(state.cities, key=lambda k: k.name)])
-
-    amenities = storage.all(Amenity).values()
-    amenities = sorted(amenities, key=lambda k: k.name)
-
-    places = storage.all(Place).values()
-    places = sorted(places, key=lambda k: k.name)
-
-    return render_template('100-hbnb.html',
-                           states=state_c,
-                           amenities=amenities,
-                           places=places)
-
-
-if __name__ == "__main__":
-    """ Main Function """
-    app.run(host='0.0.0.0', port=5000)
+if __name__ == '__main__':
+    app.run(port=5000, host='0.0.0.0')

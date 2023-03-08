@@ -1,18 +1,13 @@
 #!/usr/bin/python3
-'''
-    contains the hello HBNB function
-'''
 
 from flask import Flask
 
 app = Flask(__name__)
 
-
-@app.route("/", strict_slashes=False)
-def hello_hbnb():
-    '''prints hello HBNB to screen'''
-    return "Hello HBNB!"
+@app.route('/', strict_slashes=False)
+def Hello():
+    return 'Hello HBNB!'
 
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+if __name__ == '__main__':
+    app.run(port=5000, host='0.0.0.0')

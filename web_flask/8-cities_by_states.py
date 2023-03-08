@@ -1,30 +1,26 @@
 #!/usr/bin/python3
-'''
-    module to start a flask app
-'''
 
 from flask import Flask, render_template
+import models
 from models import storage
+from models.state import State
+from models.city import City
+from models.engine.file_storage import FileStorage
+from models.engine.db_storage import DBStorage
 
 app = Flask(__name__)
 
 
-@app.route("/states_list", strict_slashes=False)
-def states_list():
-    '''returns a template of unordered lists of state
-        objects
-    '''
-    states = storage.all('State')
-    return render_template("8-cities_by_states.html", states=states)
-
-
 @app.teardown_appcontext
-def remove_session(self):
-    '''
-        tears down the session
-    '''
+def teardown_db(exception):
     storage.close()
 
 
-if __name__ == "__main__":
-    app.run(host='0.0.0.0', port='5000')
+@app.route('/cities_by_states', strict_slashes=False)
+def cities_by_states():
+    objs = models.storage.all(State)
+    o_d = [o for o in objs.values()]
+    return render_template('8-cities_by_states.html', o_d=o_d)
+
+if __name__ == '__main__':
+    app.run(port=5000, host='0.0.0.0')
